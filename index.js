@@ -5,10 +5,10 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]
 });
 
-client.once("ready", () => {
-  console.log("Bot online!");
+const VOICE_CHANNEL_ID = "1482794282501931192"; // حط ID ديال الصوت هنا
 
-  const channel = client.channels.cache.get("1482794282501931192");
+function connectToVoice() {
+  const channel = client.channels.cache.get(VOICE_CHANNEL_ID);
 
   if (!channel) return console.log("Voice channel not found");
 
@@ -17,6 +17,25 @@ client.once("ready", () => {
     guildId: channel.guild.id,
     adapterCreator: channel.guild.voiceAdapterCreator
   });
+
+  console.log("Joined voice channel");
+}
+
+client.once("ready", () => {
+  console.log("Bot online!");
+  connectToVoice();
+});
+
+client.on("voiceStateUpdate", () => {
+  const channel = client.channels.cache.get(VOICE_CHANNEL_ID);
+  if (!channel) return;
+
+  const bot = channel.guild.members.me;
+
+  if (!bot.voice.channel) {
+    console.log("Reconnecting to voice...");
+    connectToVoice();
+  }
 });
 
 client.login(process.env.TOKEN);
