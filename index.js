@@ -8,7 +8,7 @@ const client = new Client({
 client.once("ready", () => {
   console.log("Bot online!");
 
-  const channel = client.channels.cache.get("1480969774111391908");
+  const channel = client.channels.cache.get("1482794282501931192");
 
   if (!channel) return console.log("Voice channel not found");
 
